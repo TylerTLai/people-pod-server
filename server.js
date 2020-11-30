@@ -32,6 +32,10 @@ app.use(cors());
 
 // Define routes
 
+// Define Routes
+app.use('/api/people', peopleRoute);
+app.use('/api/groups', groupRoute);
+
 app.get('/', (req, res) => {
   res.send('Thanks for using PeoplePod!');
 });
