@@ -3,6 +3,9 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const mongoose = require('mongoose');
 
+const peopleRoute = require('./routes/api/peopleRoute');
+const groupRoute = require('./routes/api/groupRoute');
+
 const PORT = process.env.PORT || 5000;
 const app = express();
 
@@ -37,5 +40,6 @@ app.use('/api/people', peopleRoute);
 app.use('/api/groups', groupRoute);
 
 app.get('/', (req, res) => {
+  console.log('from backend ', req);
   res.send('Thanks for using PeoplePod!');
 });
