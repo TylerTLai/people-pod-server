@@ -33,13 +33,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-// Define routes
-
 // Define Routes
 app.use('/api/people', peopleRoute);
 app.use('/api/groups', groupRoute);
 
 app.get('/', (req, res) => {
-  console.log('from backend ', req);
   res.send('Thanks for using PeoplePod!');
 });
