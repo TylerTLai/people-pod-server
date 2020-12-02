@@ -85,6 +85,7 @@ exports.updatePerson = async (req, res) => {
 
 // Favorite a person
 exports.favoritePerson = async (req, res) => {
+
   try {
     const id = req.params.personId;
     await Person.findById(id, onFind);
@@ -93,6 +94,7 @@ exports.favoritePerson = async (req, res) => {
       if (!person) {
         res.status(404).send('Person not found.');
       } else {
+        
         const personAlreadyFaved = person.group.some(
           (el) => el.groupName === 'Favorite'
         );
@@ -147,6 +149,7 @@ exports.getPerson = async (req, res) => {
     res.status(500).send('Server Error');
   }
 };
+
 // Delete a person
 exports.deletePerson = async (req, res) => {
   const personId = req.params.personId;
@@ -165,7 +168,7 @@ exports.deletePerson = async (req, res) => {
   }
 };
 
-// Get A Group (maybe i can delete this now...)
+// Get a group (maybe i can delete this now...)
 exports.getGroup = async (req, res) => {
   let groupSlug = req.params.group;
   console.log('from get a group ', groupSlug);
