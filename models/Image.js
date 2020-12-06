@@ -2,10 +2,14 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const imageSchema = new Schema({
-  filePath: { String },
-  timestamps: true,
-});
+const imageSchema = new Schema(
+  {
+    filePath: String,
+  },
+  {
+    timestamps: true,
+  }
+);
 
 const Image = mongoose.model('Image', imageSchema);
 

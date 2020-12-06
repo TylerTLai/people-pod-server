@@ -1,6 +1,9 @@
 const express = require('express');
 const multer = require('multer');
+const path = require('path');
 const router = express.Router();
+
+const Image = require('../../models/Image');
 
 // Define how multer handles storing files
 const storage = multer.diskStorage({
@@ -8,8 +11,12 @@ const storage = multer.diskStorage({
     cb(null, 'uploads');
   },
   filename: (req, file, cb) => {
+    // const ext = path.extname(file.originalname);
     const { originalname } = file;
-    cb(null, originalname);
+    const filePath = `/images/${originalname}`;
+    Image.create({ filePath: filePath }).then(() => {
+      cb(null, filePath);
+    });
   },
 });
 
@@ -17,13 +24,9 @@ const upload = multer({
   storage,
 });
 
-// Upload image
+// Upload image(s)
 router.post('/', upload.array('picture'), (req, res) => {
   res.json({ status: 200, uploaded: req.files.length });
-});
-
-router.get('/', (req, res) => {
-  res.send('file uploaded');
 });
 
 module.exports = router;
