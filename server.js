@@ -41,7 +41,7 @@ app.use(express.urlencoded({ extended: true }));
 // Define Routes
 app.use('/api/groups', groupRoute);
 app.use('/api/people', peopleRoute);
-app.use('/api/upload', uploadRoute);
+// app.use('/api/upload/:personId', uploadRoute);
 app.use('/api/images', imageRoute);
 
 app.get('/', (req, res) => {

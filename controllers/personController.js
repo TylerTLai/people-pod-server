@@ -21,6 +21,7 @@ exports.addPerson = async (req, res) => {
   });
 
   const newPerson = await person.save();
+  // console.log('what is newPerson ', newPerson);
 
   res.json(newPerson);
 };
