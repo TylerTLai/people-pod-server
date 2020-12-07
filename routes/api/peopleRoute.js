@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 
 const personController = require('../../controllers/personController');
+const upload = require('../../utils/multer');
 
 // Add a person
-router.post('/add', personController.addPerson);
+router.post('/add', upload.array('picture', 3), personController.addPerson);
 
 // Get all people
 router.get('/', personController.getAll);

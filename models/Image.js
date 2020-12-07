@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const imageSchema = new Schema({
-  personId: { type: String },
+  owner: { type: Schema.Types.ObjectId, ref: 'Person' },
   filePath: { type: String },
 });
 

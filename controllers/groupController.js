@@ -37,8 +37,7 @@ exports.getGroup = async (req, res) => {
 exports.addGroup = async (req, res) => {
   const groupReq = req.body;
 
-  console.log('from addGroup, what is groupReq ', groupReq);
-  // groupReq is an array of objs [ { label: 'Simpsons', value: 'Simpsons' } ]
+  // groupReq is an array of objs ex: [ { label: 'Simpsons', value: 'Simpsons' } ]
 
   try {
     // groupReq is an array (groups were added via the 'add person' form), so do this:

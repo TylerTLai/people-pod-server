@@ -7,7 +7,6 @@ const path = require('path');
 const groupRoute = require('./routes/api/groupRoute');
 const imageRoute = require('./routes/api/imageRoute');
 const peopleRoute = require('./routes/api/peopleRoute');
-const uploadRoute = require('./routes/api/uploadRoute');
 
 const PORT = process.env.PORT || 5000;
 const app = express();
@@ -41,7 +40,6 @@ app.use(express.urlencoded({ extended: true }));
 // Define Routes
 app.use('/api/groups', groupRoute);
 app.use('/api/people', peopleRoute);
-// app.use('/api/upload/:personId', uploadRoute);
 app.use('/api/images', imageRoute);
 
 app.get('/', (req, res) => {

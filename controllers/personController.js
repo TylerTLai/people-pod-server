@@ -1,29 +1,59 @@
+const Image = require('../models/Image');
 const Group = require('../models/Group');
 const Person = require('../models/Person');
 
 // Add a person
 exports.addPerson = async (req, res) => {
-  const { fName, lName, note } = req.body.person;
-  const group = req.body.group;
+  try {
+    const { fName, lName, note } = req.body.person;
+    const group = req.body.group;
 
-  // remove label field and change key to 'groupName'
-  group.map((groupObj) => {
-    delete groupObj.label;
-    groupObj.groupName = groupObj.value;
-    delete groupObj.value;
-  });
+    // remove label field and change key to 'groupName'
+    group.map((groupObj) => {
+      delete groupObj.label;
+      groupObj.groupName = groupObj.value;
+      delete groupObj.value;
+    });
 
-  const person = new Person({
-    fName,
-    lName,
-    note,
-    group,
-  });
+    // get the uploaded images.
+    // await Image.find({}, onFind);
 
-  const newPerson = await person.save();
-  // console.log('what is newPerson ', newPerson);
+    const images = await Image.find({});
 
-  res.json(newPerson);
+    // console.log('what is images ', images);
+
+    const person = new Person({
+      fName,
+      lName,
+      note,
+      group,
+      images,
+    });
+
+    await person.save();
+
+    res.json(person);
+
+    // async function onFind(err, images) {
+    //   if (!images) {
+    //     res.status(404).send('Images not found.');
+    //   } else {
+    //     const person = new Person({
+    //       fName,
+    //       lName,
+    //       note,
+    //       group,
+    //       images,
+    //     });
+
+    //     await person.save();
+
+    //     res.json(person);
+    //   }
+    // }
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 // Get all people
@@ -86,7 +116,6 @@ exports.updatePerson = async (req, res) => {
 
 // Favorite a person
 exports.favoritePerson = async (req, res) => {
-
   try {
     const id = req.params.personId;
     await Person.findById(id, onFind);
@@ -95,7 +124,6 @@ exports.favoritePerson = async (req, res) => {
       if (!person) {
         res.status(404).send('Person not found.');
       } else {
-        
         const personAlreadyFaved = person.group.some(
           (el) => el.groupName === 'Favorite'
         );

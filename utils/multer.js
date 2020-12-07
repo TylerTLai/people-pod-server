@@ -10,23 +10,26 @@ const storage = multer.diskStorage({
     cb(null, 'uploads');
   },
   filename: (req, file, cb) => {
-    console.log('req.params >>> ', req.params);
-
-    const { personId } = req.params;
+    console.log('req.files >>> ', req.files);
     const { originalname } = file;
     const ext = path.extname(file.originalname);
     // check filename to see if extension already exists.
     const newFileName = removeFileExt(originalname);
-    const filePath = `/images/${personId}-${newFileName}${ext}`;
+    const filePath = `/images/${newFileName}${ext}`;
 
-    const image = new Image({
-      personId,
+    Image.create({
       filePath,
-    });
-
-    image.save().then(() => {
+    }).then(() => {
       cb(null, filePath);
     });
+
+    // const image = new Image({
+    //   filePath,
+    // });
+
+    // image.save().then(() => {
+    //   cb(null, filePath);
+    // });
   },
 });
 
