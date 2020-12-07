@@ -8,7 +8,7 @@ const imageRoute = require('./routes/api/imageRoute');
 const peopleRoute = require('./routes/api/peopleRoute');
 const connectDB = require('./config/db');
 
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5000;
 const app = express();
 
 dotenv.config();
