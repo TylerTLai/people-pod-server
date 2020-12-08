@@ -4,6 +4,7 @@ const cors = require('cors');
 const path = require('path');
 
 const connectDB = require('./config/db');
+const authRoute = require('./routes/api/authRoute');
 const groupRoute = require('./routes/api/groupRoute');
 const imageRoute = require('./routes/api/imageRoute');
 const peopleRoute = require('./routes/api/peopleRoute');
@@ -30,6 +31,7 @@ app.use('/api/groups', groupRoute);
 app.use('/api/people', peopleRoute);
 app.use('/api/images', imageRoute);
 app.use('/api/users', userRoute);
+app.use('/api/auth', authRoute);
 
 app.get('/', (req, res) => {
   res.send('Thanks for using PeoplePod!');
