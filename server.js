@@ -9,7 +9,7 @@ const imageRoute = require('./routes/api/imageRoute');
 const peopleRoute = require('./routes/api/peopleRoute');
 const userRoute = require('./routes/api/userRoute');
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 const app = express();
 
 dotenv.config();
