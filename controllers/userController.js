@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const { check, validationResult } = require('express-validator');
+const jwt = require('jsonwebtoken');
 const gravatar = require('gravatar');
 
 const User = require('../models/User');
@@ -17,7 +18,9 @@ exports.addUser = async (req, res) => {
 
     // Check if user already exists
     if (user) {
-      return res.status(400).json({ errors: [{ msg: 'User already exists.' }] });
+      return res
+        .status(400)
+        .json({ errors: [{ msg: 'User already exists.' }] });
     }
 
     // Get user gravatar
@@ -39,8 +42,22 @@ exports.addUser = async (req, res) => {
 
     await user.save();
 
-    res.send('user registered!');
+    // Return jwt
+    const payload = {
+      user: {
+        id: user.id,
+      },
+    };
 
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      { expiresIn: 360000 },
+      (err, token) => {
+        if (err) throw err;
+        res.json({ token });
+      }
+    );
   } catch (err) {
     console.error(err.message);
     res.status(500).send('server error');
