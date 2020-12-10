@@ -8,6 +8,7 @@ const authRoute = require('./routes/api/authRoute');
 const groupRoute = require('./routes/api/groupRoute');
 const imageRoute = require('./routes/api/imageRoute');
 const peopleRoute = require('./routes/api/peopleRoute');
+const profileRoute = require('./routes/api/profileRoute');
 const userRoute = require('./routes/api/userRoute');
 
 const PORT = process.env.PORT || 5001;
@@ -32,6 +33,7 @@ app.use('/api/people', peopleRoute);
 app.use('/api/images', imageRoute);
 app.use('/api/users', userRoute);
 app.use('/api/auth', authRoute);
+app.use('/api/profile', profileRoute);
 
 app.get('/', (req, res) => {
   res.send('Thanks for using PeoplePod!');
