@@ -11,7 +11,7 @@ const peopleRoute = require('./routes/api/peopleRoute');
 const profileRoute = require('./routes/api/profileRoute');
 const userRoute = require('./routes/api/userRoute');
 
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5000;
 const app = express();
 
 dotenv.config();

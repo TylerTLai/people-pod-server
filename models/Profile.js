@@ -6,6 +6,9 @@ const ProfileSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user',
   },
+  name: {
+    type: String,
+  },
   email: {
     type: String,
   },
