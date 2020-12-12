@@ -20,7 +20,7 @@ exports.addPerson = async (req, res) => {
 
     const images = await Image.find({});
 
-    // console.log('what is images ', images);
+    console.log('what is images ', images);
 
     const person = new Person({
       fName,
@@ -172,7 +172,7 @@ exports.getPerson = async (req, res) => {
       res.status(404).json({ msg: 'Person not found.' });
     }
 
-    res.json(person);
+    return res.json(person);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');

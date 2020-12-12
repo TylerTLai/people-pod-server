@@ -10,7 +10,6 @@ const storage = multer.diskStorage({
     cb(null, 'uploads');
   },
   filename: (req, file, cb) => {
-    console.log('req.files >>> ', req.files);
     const { originalname } = file;
     const ext = path.extname(file.originalname);
     // check filename to see if extension already exists.
@@ -22,14 +21,6 @@ const storage = multer.diskStorage({
     }).then(() => {
       cb(null, filePath);
     });
-
-    // const image = new Image({
-    //   filePath,
-    // });
-
-    // image.save().then(() => {
-    //   cb(null, filePath);
-    // });
   },
 });
 

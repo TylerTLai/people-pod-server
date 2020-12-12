@@ -34,7 +34,3 @@ app.use('/api/images', imageRoute);
 app.use('/api/users', userRoute);
 app.use('/api/auth', authRoute);
 app.use('/api/profile', profileRoute);
-
-app.get('/', (req, res) => {
-  res.send('Thanks for using PeoplePod!');
-});
