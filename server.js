@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const fileUpload = require('express-fileupload');
 const path = require('path');
 
 const connectDB = require('./config/db');
@@ -26,6 +27,7 @@ app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
+app.use(fileUpload());
 
 // Define Routes
 app.use('/api/groups', groupRoute);

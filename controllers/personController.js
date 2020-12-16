@@ -1,56 +1,35 @@
 const Image = require('../models/Image');
 const Group = require('../models/Group');
 const Person = require('../models/Person');
-
+const removeFileExt = require('../utils/removeFileExt');
+const convertTypetoExt = require('../utils/convertTypetoExt');
 // Add a person
 exports.addPerson = async (req, res) => {
+  console.log('perconController req.body >>> ', req.body);
+  console.log('perconController req.params >>> ', req.params);
+  console.log('perconController req.files >>> ', req.files);
+
   try {
-    const { fName, lName, note } = req.body.person;
-    const group = req.body.group;
-
+    // const { fName, lName, note } = req.body.person;
+    // const group = req.body.group;
+    // const imagesObj = req.body.images;
     // remove label field and change key to 'groupName'
-    group.map((groupObj) => {
-      delete groupObj.label;
-      groupObj.groupName = groupObj.value;
-      delete groupObj.value;
-    });
-
-    // get the uploaded images.
-    // await Image.find({}, onFind);
-
-    const images = await Image.find({});
-
-    console.log('what is images ', images);
-
-    const person = new Person({
-      fName,
-      lName,
-      note,
-      group,
-      images,
-    });
-
-    await person.save();
-
-    res.json(person);
-
-    // async function onFind(err, images) {
-    //   if (!images) {
-    //     res.status(404).send('Images not found.');
-    //   } else {
-    //     const person = new Person({
-    //       fName,
-    //       lName,
-    //       note,
-    //       group,
-    //       images,
-    //     });
-
-    //     await person.save();
-
-    //     res.json(person);
-    //   }
-    // }
+    // group.map((groupObj) => {
+    //   delete groupObj.label;
+    //   groupObj.groupName = groupObj.value;
+    //   delete groupObj.value;
+    // });
+    // const images = await Image.find({});
+    // console.log('image >>> ', images);
+    // const person = new Person({
+    //   fName,
+    //   lName,
+    //   note,
+    //   group,
+    //   images
+    // });
+    // await person.save();
+    // res.json(person);
   } catch (err) {
     console.error(err);
   }
