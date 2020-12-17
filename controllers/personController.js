@@ -3,36 +3,37 @@ const Group = require('../models/Group');
 const Person = require('../models/Person');
 const removeFileExt = require('../utils/removeFileExt');
 const convertTypetoExt = require('../utils/convertTypetoExt');
+
 // Add a person
 exports.addPerson = async (req, res) => {
+
   console.log('perconController req.body >>> ', req.body);
-  console.log('perconController req.params >>> ', req.params);
   console.log('perconController req.files >>> ', req.files);
 
-  try {
-    // const { fName, lName, note } = req.body.person;
-    // const group = req.body.group;
-    // const imagesObj = req.body.images;
-    // remove label field and change key to 'groupName'
-    // group.map((groupObj) => {
-    //   delete groupObj.label;
-    //   groupObj.groupName = groupObj.value;
-    //   delete groupObj.value;
-    // });
-    // const images = await Image.find({});
-    // console.log('image >>> ', images);
-    // const person = new Person({
-    //   fName,
-    //   lName,
-    //   note,
-    //   group,
-    //   images
-    // });
-    // await person.save();
-    // res.json(person);
-  } catch (err) {
-    console.error(err);
-  }
+  // try {
+  //   const { fName, lName, note } = req.body.person;
+  //   const group = req.body.group;
+  //   const imagesObj = req.body.images;
+  //   remove label field and change key to 'groupName'
+  //   group.map((groupObj) => {
+  //     delete groupObj.label;
+  //     groupObj.groupName = groupObj.value;
+  //     delete groupObj.value;
+  //   });
+  //   const images = await Image.find({});
+  //   console.log('image >>> ', images);
+  //   const person = new Person({
+  //     fName,
+  //     lName,
+  //     note,
+  //     group,
+  //     images
+  //   });
+  //   await person.save();
+  //   res.json(person);
+  // } catch (err) {
+  //   console.error(err);
+  // }
 };
 
 // Get all people
