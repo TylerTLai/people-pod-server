@@ -7,19 +7,41 @@ const Person = require('../models/Person');
 // Add a person
 exports.addPerson = async (req, res) => {
   // console.log('perconController req.body >>> ', req.body);
-  console.log('perconController req.files >>> ', req.files.picture);
+  console.log('perconController req.files >>> ', req.files);
 
   try {
+    let filePath = '';
     // Handle image(s)
 
     // Handle no images selected.
     if (!req.files || Object.keys(req.files).length === 0) {
-      console.log('No files were uploaded.');
-      return res.status(400).send('No files were uploaded.');
+      // Handle text fields
+      const { fName, lName, groupsJSON, note } = req.body;
+      const group = JSON.parse(groupsJSON);
+      const image = ""
+
+      // Handle no group selected.
+      if (group.length === 0) {
+        group.push({ groupName: 'everyone' });
+      }
+
+      let imageArr = [];
+      imageArr.push(filePath + image);
+      let images = imageArr.map((image) => ({ filePath: image }));
+
+      const person = new Person({
+        fName,
+        lName,
+        note,
+        group,
+        images,
+      });
+
+      await person.save();
+      res.json(person);
     }
 
     const singleUpload = !Array.isArray(req.files.picture);
-    let filePath = '';
 
     if (singleUpload) {
       const picture = req.files.picture;
@@ -59,7 +81,6 @@ exports.addPerson = async (req, res) => {
 
       await person.save();
       res.json(person);
-
     } else {
       const pictures = req.files.picture;
       let imageArr = [];
