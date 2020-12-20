@@ -1,17 +1,18 @@
-const Group = require('../models/Group');
-const Person = require('../models/Person');
-const removeFileExt = require('../utils/removeFileExt');
-const convertTypetoExt = require('../utils/convertTypetoExt');
 const { v4: uuidv4 } = require('uuid');
+
+const Group = require('../models/Group');
 const Image = require('../models/Image');
+const Person = require('../models/Person');
 
 // Add a person
 exports.addPerson = async (req, res) => {
-  console.log('perconController req.body >>> ', req.body);
-  // console.log('perconController req.files >>> ', req.files);
+  // console.log('perconController req.body >>> ', req.body);
+  console.log('perconController req.files >>> ', req.files.picture);
 
   try {
-    // handle image(s)
+    // Handle image(s)
+
+    // Handle no images selected.
     if (!req.files || Object.keys(req.files).length === 0) {
       console.log('No files were uploaded.');
       return res.status(400).send('No files were uploaded.');
@@ -43,7 +44,7 @@ exports.addPerson = async (req, res) => {
       const { fName, lName, groupsJSON, note } = req.body;
       const group = JSON.parse(groupsJSON);
 
-      // No group selected.
+      // Handle no group selected.
       if (group.length === 0) {
         group.push({ groupName: 'everyone' });
       }
@@ -58,6 +59,7 @@ exports.addPerson = async (req, res) => {
 
       await person.save();
       res.json(person);
+
     } else {
       const pictures = req.files.picture;
       let imageArr = [];
@@ -79,9 +81,14 @@ exports.addPerson = async (req, res) => {
 
       let images = imageArr.map((image) => ({ filePath: image }));
 
-      // handle fields
+      // Handle text fields
       const { fName, lName, groupsJSON, note } = req.body;
       const group = JSON.parse(groupsJSON);
+
+      // Handle no group selected.
+      if (group.length === 0) {
+        group.push({ groupName: 'everyone' });
+      }
 
       const person = new Person({
         fName,
