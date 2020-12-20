@@ -1,39 +1,102 @@
-const Image = require('../models/Image');
 const Group = require('../models/Group');
 const Person = require('../models/Person');
 const removeFileExt = require('../utils/removeFileExt');
 const convertTypetoExt = require('../utils/convertTypetoExt');
+const { v4: uuidv4 } = require('uuid');
+const Image = require('../models/Image');
 
 // Add a person
 exports.addPerson = async (req, res) => {
-
   console.log('perconController req.body >>> ', req.body);
-  console.log('perconController req.files >>> ', req.files);
+  // console.log('perconController req.files >>> ', req.files);
 
-  // try {
-  //   const { fName, lName, note } = req.body.person;
-  //   const group = req.body.group;
-  //   const imagesObj = req.body.images;
-  //   remove label field and change key to 'groupName'
-  //   group.map((groupObj) => {
-  //     delete groupObj.label;
-  //     groupObj.groupName = groupObj.value;
-  //     delete groupObj.value;
-  //   });
-  //   const images = await Image.find({});
-  //   console.log('image >>> ', images);
-  //   const person = new Person({
-  //     fName,
-  //     lName,
-  //     note,
-  //     group,
-  //     images
-  //   });
-  //   await person.save();
-  //   res.json(person);
-  // } catch (err) {
-  //   console.error(err);
-  // }
+  try {
+    // handle image(s)
+    if (!req.files || Object.keys(req.files).length === 0) {
+      console.log('No files were uploaded.');
+      return res.status(400).send('No files were uploaded.');
+    }
+
+    const singleUpload = !Array.isArray(req.files.picture);
+    let filePath = '';
+
+    if (singleUpload) {
+      const picture = req.files.picture;
+
+      filePath = 'uploads/images/' + uuidv4() + picture.name;
+
+      picture.mv(filePath, (err) => {
+        if (err) return res.status(500).send(err);
+      });
+
+      Image.create({
+        filePath,
+      }).then((imageDoc) => {
+        console.log('Images filePaths saved to db ', imageDoc.filePath);
+      });
+
+      let imageArr = [];
+      imageArr.push(filePath);
+      let images = imageArr.map((image) => ({ filePath: image }));
+
+      // Handle text fields
+      const { fName, lName, groupsJSON, note } = req.body;
+      const group = JSON.parse(groupsJSON);
+
+      // No group selected.
+      if (group.length === 0) {
+        group.push({ groupName: 'everyone' });
+      }
+
+      const person = new Person({
+        fName,
+        lName,
+        note,
+        group,
+        images,
+      });
+
+      await person.save();
+      res.json(person);
+    } else {
+      const pictures = req.files.picture;
+      let imageArr = [];
+
+      pictures.forEach((pic) => {
+        filePath = 'uploads/images/' + uuidv4() + pic.name;
+        imageArr.push(filePath);
+
+        pic.mv(filePath, (err) => {
+          if (err) return res.status(500).send(err);
+        });
+
+        Image.create({
+          filePath,
+        }).then((imageDoc) => {
+          console.log('Images filePaths saved to db ', imageDoc.filePath);
+        });
+      });
+
+      let images = imageArr.map((image) => ({ filePath: image }));
+
+      // handle fields
+      const { fName, lName, groupsJSON, note } = req.body;
+      const group = JSON.parse(groupsJSON);
+
+      const person = new Person({
+        fName,
+        lName,
+        note,
+        group,
+        images,
+      });
+
+      await person.save();
+      res.json(person);
+    }
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 // Get all people
