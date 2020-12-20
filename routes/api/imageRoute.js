@@ -5,7 +5,7 @@ const imageController = require('../../controllers/imageController');
 const upload = require('../../utils/multer');
 
 // Add image(s)
-router.post('/upload', upload.array('picture', 5), imageController.addImage);
+router.post('/upload', imageController.addImage);
 
 // Get all image(s)
 router.get('/', imageController.getImage);

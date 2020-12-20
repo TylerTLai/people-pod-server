@@ -1,56 +1,127 @@
-const Image = require('../models/Image');
+const { v4: uuidv4 } = require('uuid');
+
 const Group = require('../models/Group');
+const Image = require('../models/Image');
 const Person = require('../models/Person');
 
 // Add a person
 exports.addPerson = async (req, res) => {
+  // console.log('perconController req.body >>> ', req.body);
+  console.log('perconController req.files >>> ', req.files);
+
   try {
-    const { fName, lName, note } = req.body.person;
-    const group = req.body.group;
+    let filePath = '';
+    // Handle image(s)
 
-    // remove label field and change key to 'groupName'
-    group.map((groupObj) => {
-      delete groupObj.label;
-      groupObj.groupName = groupObj.value;
-      delete groupObj.value;
-    });
+    // Handle no images selected.
+    if (!req.files || Object.keys(req.files).length === 0) {
+      // Handle text fields
+      const { fName, lName, groupsJSON, note } = req.body;
+      const group = JSON.parse(groupsJSON);
+      const image = ""
 
-    // get the uploaded images.
-    // await Image.find({}, onFind);
+      // Handle no group selected.
+      if (group.length === 0) {
+        group.push({ groupName: 'everyone' });
+      }
 
-    const images = await Image.find({});
+      let imageArr = [];
+      imageArr.push(filePath + image);
+      let images = imageArr.map((image) => ({ filePath: image }));
 
-    console.log('what is images ', images);
+      const person = new Person({
+        fName,
+        lName,
+        note,
+        group,
+        images,
+      });
 
-    const person = new Person({
-      fName,
-      lName,
-      note,
-      group,
-      images,
-    });
+      await person.save();
+      res.json(person);
+    }
 
-    await person.save();
+    const singleUpload = !Array.isArray(req.files.picture);
 
-    res.json(person);
+    if (singleUpload) {
+      const picture = req.files.picture;
 
-    // async function onFind(err, images) {
-    //   if (!images) {
-    //     res.status(404).send('Images not found.');
-    //   } else {
-    //     const person = new Person({
-    //       fName,
-    //       lName,
-    //       note,
-    //       group,
-    //       images,
-    //     });
+      filePath = 'uploads/images/' + uuidv4() + picture.name;
 
-    //     await person.save();
+      picture.mv(filePath, (err) => {
+        if (err) return res.status(500).send(err);
+      });
 
-    //     res.json(person);
-    //   }
-    // }
+      Image.create({
+        filePath,
+      }).then((imageDoc) => {
+        console.log('Images filePaths saved to db ', imageDoc.filePath);
+      });
+
+      let imageArr = [];
+      imageArr.push(filePath);
+      let images = imageArr.map((image) => ({ filePath: image }));
+
+      // Handle text fields
+      const { fName, lName, groupsJSON, note } = req.body;
+      const group = JSON.parse(groupsJSON);
+
+      // Handle no group selected.
+      if (group.length === 0) {
+        group.push({ groupName: 'everyone' });
+      }
+
+      const person = new Person({
+        fName,
+        lName,
+        note,
+        group,
+        images,
+      });
+
+      await person.save();
+      res.json(person);
+    } else {
+      const pictures = req.files.picture;
+      let imageArr = [];
+
+      pictures.forEach((pic) => {
+        filePath = 'uploads/images/' + uuidv4() + pic.name;
+        imageArr.push(filePath);
+
+        pic.mv(filePath, (err) => {
+          if (err) return res.status(500).send(err);
+        });
+
+        Image.create({
+          filePath,
+        }).then((imageDoc) => {
+          console.log('Images filePaths saved to db ', imageDoc.filePath);
+        });
+      });
+
+      let images = imageArr.map((image) => ({ filePath: image }));
+
+      // Handle text fields
+      const { fName, lName, groupsJSON, note } = req.body;
+      const group = JSON.parse(groupsJSON);
+
+      // Handle no group selected.
+      if (group.length === 0) {
+        group.push({ groupName: 'everyone' });
+      }
+
+      const person = new Person({
+        fName,
+        lName,
+        note,
+        group,
+        images,
+      });
+
+      await person.save();
+      res.json(person);
+    }
   } catch (err) {
     console.error(err);
   }
